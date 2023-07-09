@@ -32,7 +32,7 @@ device.withDelegate(btle.DefaultDelegate())
 
 # Start the main loop to receive Bluetooth data and publish it to the MQTT broker
 while True:
-    device.waitForNotifications()
+    device.waitForNotifications(1.0)
 
 # This script connects to the Bluetooth device with the specified [MAC address] enables notifications for the data characteristic,
 # and sets up a [callback function] to handle incoming data. The callback function converts the data to a string and publishes it to the MQTT broker. 
