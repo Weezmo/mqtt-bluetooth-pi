@@ -1,5 +1,3 @@
-Sure! Here's how you can modify the code to use your Renogy BT-1 device with the MAC address `F4:60:77:XX:02:8D` and alias `BT-TH-77XX028D`:
-
 1. Modify the `config.ini` file to look like this:
 
 ```
