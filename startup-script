@@ -1,0 +1,51 @@
+How to create a startup script:
+
+1. Open the terminal on your Raspberry Pi and navigate to the directory where you saved your Python script.
+
+2. Create a new file called `startscript.sh` using the following command:
+
+   `````
+   nano startscript.sh
+   ```
+
+3. In the file, add the following lines of code:
+
+   ````
+   #!/bin/bash
+   sleep 10 # Wait for the Bluetooth adapter to initialize
+   python3 bluetooth-mqtt.py &
+   ````
+
+   This code starts by specifying that the script should use the Bash shell. The `sleep 10` line adds a delay of 10 seconds to allow time for the Bluetooth adapter to initialize. The `python3 bluetooth-mqtt.py &` line runs your Python script in the background.
+
+4. Save the file by pressing `Ctrl + O`, then exit by pressing `Ctrl + X`.
+
+5. Make the script executable by running the following command:
+
+   ````
+   chmod +x startscript.sh
+   ````
+
+6. Test the script by running it manually using the following command:
+
+   ````
+   ./startscript.sh
+   ````
+
+   This should start your Python script and begin reading data from the Bluetooth device and publishing it to the MQTT broker.
+
+7. To make the script run automatically at startup, you need to add it to the system's startup scripts. You can do this by adding the following line to the end of the `/etc/rc.local` file:
+
+   ````
+   /home/pi/startscript.sh &
+   ````
+
+   Make sure to replace `/home/pi/startscript.sh` with the path to your actual script file. This line tells the system to run your startup script when the Raspberry Pi boots up.
+
+   Note: If the `/etc/rc.local` file doesn't exist on your Raspberry Pi, you can create it by running the following command:
+
+   ````
+   sudo nano /etc/rc.local
+   ````
+
+8. Save the file and exit. When you reboot your Raspberry Pi, your startup script should automatically run and start your Python script.
