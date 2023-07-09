@@ -1,1 +1,59 @@
+Sure! Here's how you can modify the code to use your Renogy BT-1 device with the MAC address `F4:60:77:XX:02:8D` and alias `BT-TH-77XX028D`:
 
+1. Modify the `config.ini` file to look like this:
+
+```
+[device]
+adapter = hci0
+mac_addr = XX:60:77:XX:02:8D
+alias = BT-TH-77XX028D    
+
+[mqtt]
+server = localhost
+port = 1883
+user = 
+password = 
+topic = solar/stats
+```
+
+2. Modify the `renogy_bt.py` script to look like this:
+
+```
+import json
+import logging
+import time
+import paho.mqtt.publish as publish
+from renogybt import BTOneClient
+from configparser import ConfigParser
+
+logging.basicConfig(level=logging.INFO)
+
+config = ConfigParser()
+config.read('config.ini')
+
+def on_data_received(data):
+    logging.debug(f"on_data_received: {json.dumps(data)}")
+
+    # Publish the data to the MQTT broker
+    mqtt_data = {
+        'pv_power': data['pv_power'],
+        'battery_percentage': data['battery_percentage']
+        # Add more fields as desired
+    }
+    publish.single(
+        config['mqtt']['topic'], payload=json.dumps(mqtt_data),
+        hostname=config['mqtt']['server'], port=config['mqtt'].getint('port'),
+        auth={'username': config['mqtt']['user'], 'password': config['mqtt']['password']}
+    )
+
+client = BTOneClient(config, on_data_received)
+
+while True:
+    try:
+        client.connect()
+    except Exception as e:
+        logging.error(f"Connect error: {repr(e)}")
+        time.sleep(10)
+```
+
+With these changes, the script should now connect to your Renogy BT-1 device with MAC address `F4:60:77:29:02:8D` and alias `BT-TH-7729028D`, and publish data to the `solar/stats` topic on your MQTT broker.
