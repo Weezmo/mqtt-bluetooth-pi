@@ -28,7 +28,7 @@ data_characteristic_handle = data_characteristic.getHandle()
 device.writeCharacteristic(data_characteristic_handle+1, b'\x01\x00')
 
 # Set up a notification handler for incoming data
-device.withDelegate(btle.DefaultDelegate(handle_data))
+device.withDelegate(btle.DefaultDelegate())
 
 # Start the main loop to receive Bluetooth data and publish it to the MQTT broker
 while True:
